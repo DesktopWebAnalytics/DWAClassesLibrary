@@ -5,7 +5,7 @@
 	Link https://github.com/DesktopWebAnalytics
 	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: DataBase.as 238 2011-12-15 15:28:16Z benoit $
+	$Id: DataBase.as 262 2012-02-04 22:01:13Z benoit $
 */
 package com.dwa.common.database
 {
@@ -22,6 +22,7 @@ package com.dwa.common.database
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
+	import flash.system.System;
 	
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="error", type="flash.events.ErrorEvent")]
@@ -376,9 +377,14 @@ package com.dwa.common.database
 		}
 		private function error(msg:String):void{
 			dispatcher.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, msg));
+			clearAll();
 		}
 		private function finish():void{
 			dispatcher.dispatchEvent(new Event(Event.COMPLETE));
+			clearAll();
+		}
+		private function clearAll():void{
+			System.gc();
 		}
 		
 		//--

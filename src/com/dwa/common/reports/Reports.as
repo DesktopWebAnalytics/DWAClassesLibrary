@@ -5,7 +5,7 @@
 	Link https://github.com/DesktopWebAnalytics
 	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: Reports.as 238 2011-12-15 15:28:16Z benoit $
+	$Id: Reports.as 262 2012-02-04 22:01:13Z benoit $
 */
 package com.dwa.common.reports
 {
@@ -16,6 +16,7 @@ package com.dwa.common.reports
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+	import flash.system.System;
 	
 	import mx.collections.XMLListCollection;
 	
@@ -224,6 +225,14 @@ package com.dwa.common.reports
 			piwikApi.callPiwikGoal("Goals.get", idGoal);
 		}
 		
+		public function getLive(profile:Profile):void{
+			piwikApi = new PiwikAPI(profile);
+			piwikApi.filter = true;
+			piwikApi.filterValue = 30;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPISimple("Live.getLastVisitsDetails");
+		}
 		public function checkAndGetAPIKey(url:String, user:String, pass:String):void{
 			piwikApi = new PiwikAPI();
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
@@ -267,6 +276,8 @@ package com.dwa.common.reports
 			resultCollection = null;
 			resultCollectionBasic = null;
 			resultCollectionRow = null;
+			
+			System.gc();
 		}
 		
 		
