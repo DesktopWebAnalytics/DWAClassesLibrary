@@ -5,7 +5,7 @@
 	Link https://github.com/DesktopWebAnalytics
 	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: LoadIcons.as 262 2012-02-04 22:01:13Z benoit $
+	$Id: LoadIcons.as 277 2012-03-01 21:24:33Z benoit $
 */
 package com.dwa.common.icons
 {
@@ -25,8 +25,24 @@ package com.dwa.common.icons
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="error", type="flash.events.ErrorEvent")]
 
+	/**
+	 * 
+	 * @author Benoit Pouzet
+	 * 
+	 * @langversion 3.0
+	 * @productversion Flex 4
+	 * 
+	 * @see https://github.com/DesktopWebAnalytics
+	 * 
+	 */
 	public class LoadIcons implements IEventDispatcher
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Variables
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var dispatcher:EventDispatcher;
 		
 		protected var storageDir:File = File.applicationStorageDirectory;
@@ -37,11 +53,21 @@ package com.dwa.common.icons
 		
 		private var file:File;
 		
+		/**
+		 * Constructor.
+		 * 
+		 */
 		public function LoadIcons()
 		{
 			dispatcher = new EventDispatcher(this);
 		}
 		
+		/**
+		 * Store icon on the local storage
+		 * 
+		 * @param url url of the icon
+		 * 
+		 */
 		public function cache(url:String):void{
 			
 			var icon:String = url.substring(url.lastIndexOf('/')+1);
@@ -82,6 +108,10 @@ package com.dwa.common.icons
 			finish();
 		}
 		
+		/**
+		 * 
+		 * 
+		 */
 		public function clearAllCache():void{
 			file = storageDir.resolvePath(DIR);
 			if(file.exists){

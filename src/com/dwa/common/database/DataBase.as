@@ -5,7 +5,7 @@
 	Link https://github.com/DesktopWebAnalytics
 	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: DataBase.as 262 2012-02-04 22:01:13Z benoit $
+	$Id: DataBase.as 277 2012-03-01 21:24:33Z benoit $
 */
 package com.dwa.common.database
 {
@@ -27,19 +27,44 @@ package com.dwa.common.database
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="error", type="flash.events.ErrorEvent")]
 
+	/**
+	 * 
+	 * @author Benoit Pouzet
+	 * 
+	 * @langversion 3.0
+	 * @productversion Flex 4
+	 * 
+	 * @see https://github.com/DesktopWebAnalytics
+	 * 
+	 */
 	public class DataBase implements IEventDispatcher
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Variables
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var dispatcher:EventDispatcher;
 		
 		private const DATABASE:String = "db_dwa.db";
 		
 		public var websitesList:Array;
 		
+		/**
+		 * Constructor.
+		 * 
+		 */
 		public function DataBase()
 		{
 			dispatcher = new EventDispatcher(this);
 		}
 		
+		/**
+		 * 
+		 * Test if the database exists if not create it.
+		 * 
+		 */
 		public function dataBaseExist():void{
 			var db:File = File.applicationStorageDirectory.resolvePath(DATABASE);
 			
@@ -50,6 +75,10 @@ package com.dwa.common.database
 			}
 		}
 		
+		/**
+		 * Creation of the database 
+		 * 
+		 */
 		private function createDB():void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.addEventListener(SQLEvent.OPEN, openHandler, false, 0, true);
@@ -73,17 +102,6 @@ package com.dwa.common.database
 			function populateDB():void {
 				var createStmt:SQLStatement = new SQLStatement();
 				createStmt.sqlConnection = conn;
-				
-				/* var sql:String = 
-				"CREATE TABLE IF NOT EXISTS profiles (" + 
-				"    profilesId INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-				"    profileName TEXT, " + 
-				"    profileSiteUrl TEXT, " + 
-				"    profileSiteAuth TEXT, " + 
-				"	 profileSiteId INTEGER, " +
-				"	 profileSiteIdName TEXT, " +
-				"	 profileDesc TEXT " +
-				")"; */
 				
 				var sql:String =
 					"CREATE TABLE IF NOT EXISTS websites (" +
@@ -124,6 +142,10 @@ package com.dwa.common.database
 			
 		}
 		
+		/**
+		 * Add default profile in the database 
+		 * 
+		 */
 		private function defaultProfile():void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.addEventListener(SQLEvent.OPEN, openHandler, false, 0, true);
@@ -174,6 +196,12 @@ package com.dwa.common.database
 			var pattern:RegExp = /&quote;/g;
 			return str.replace(pattern, "'");
 		}
+		/**
+		 * Add profile in the database
+		 * 
+		 * @param list Array of profiles
+		 * 
+		 */
 		public function addProfile(list:Array):void {
 			var length:int = list.length;
 			var index:int = 0;
@@ -228,6 +256,14 @@ package com.dwa.common.database
 				error(event.error.message + ' - Details: ' + event.error.details);
 			}
 		}
+		/**
+		 * Update a profile
+		 * 
+		 * @param id database id
+		 * @param period Number
+		 * @param day Boolean
+		 * 
+		 */
 		public function updateProfile(id:int, period:Number, day:Boolean):void{
 			var conn:SQLConnection = new SQLConnection();
 			conn.addEventListener(SQLEvent.OPEN, openHandler, false, 0, true);
@@ -262,7 +298,13 @@ package com.dwa.common.database
 				trace("Details:", event.error.details);
 			}
 		}
-		public function removeProfile(item:int):void {
+		/**
+		 * Remove a profile
+		 * 
+		 * @param id database id
+		 * 
+		 */
+		public function removeProfile(id:int):void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.addEventListener(SQLEvent.OPEN, openHandler, false, 0, true);
 			conn.addEventListener(SQLErrorEvent.ERROR, errorHandler, false, 0, true);
@@ -286,7 +328,7 @@ package com.dwa.common.database
 				var removeStmt:SQLStatement = new SQLStatement();
 				removeStmt.sqlConnection = conn;
 				
-				var sql:String = "DELETE FROM websites WHERE dbId='" + item + "'";
+				var sql:String = "DELETE FROM websites WHERE dbId='" + id + "'";
 				trace (sql);
 				removeStmt.text = sql;
 				removeStmt.addEventListener(SQLEvent.RESULT, removeResult, false, 0, true);
@@ -304,6 +346,14 @@ package com.dwa.common.database
 				
 			}
 		}
+		/**
+		 * 
+		 * Get all websites stored in the database
+		 * 
+		 * 
+		 * @param orderByName Sort result by name
+		 * 
+		 */
 		public function getAllWebsites(orderByName:Boolean=false):void {
 			var conn:SQLConnection = new SQLConnection();
 			conn.addEventListener(SQLEvent.OPEN, openHandler, false, 0, true);
@@ -375,6 +425,11 @@ package com.dwa.common.database
 				trace("Details:", event.error.details);
 			}
 		}
+		/**
+		 * 
+		 * @param msg
+		 * 
+		 */
 		private function error(msg:String):void{
 			dispatcher.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, msg));
 			clearAll();

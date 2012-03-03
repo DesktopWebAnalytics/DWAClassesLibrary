@@ -22,17 +22,43 @@ package com.dwa.common.settings
 	[Event(name="complete", type="flash.events.Event")]
 	[Event(name="error", type="flash.events.ErrorEvent")]
 	
+	/**
+	 * 
+	 * @author Benoit Pouzet
+	 * 
+	 * @langversion 3.0
+	 * @productversion Flex 4
+	 * 
+	 * @see https://github.com/DesktopWebAnalytics
+	 * 
+	 */
 	public class SettingsFile implements IEventDispatcher
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Variables
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var dispatcher:EventDispatcher;
 		
 		public var locale:String;
 		
+		/**
+		 * Constructor.
+		 * 
+		 */
 		public function SettingsFile()
 		{
 			dispatcher = new EventDispatcher(this);
 		}
 		
+		/**
+		 * Check settings
+		 *  
+		 * @param version
+		 * 
+		 */
 		public function checkSettings(version:String):void{	
 			var settingsFile:File = File.applicationStorageDirectory.resolvePath("prefs/settings.xml");
 			
@@ -92,6 +118,12 @@ package com.dwa.common.settings
 			
 			delCache = null;
 		}
+		/**
+		 * Save locale to settings
+		 *  
+		 * @param locale
+		 * 
+		 */
 		public function saveLocaleToSettings(locale:String):void{
 			var file:File = File.applicationStorageDirectory.resolvePath("prefs/settings.xml");
 			var fileStream:FileStream = new FileStream();

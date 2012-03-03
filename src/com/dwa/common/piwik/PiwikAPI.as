@@ -34,8 +34,24 @@ package com.dwa.common.piwik
 	[Event(name='complete', type='flash.events.Event')]
 	[Event(name='error', type='flash.events.ErrorEvent')]
 	
+	/**
+	 * 
+	 * @author Benoit Pouzet
+	 * 
+	 * @langversion 3.0
+	 * @productversion Flex 4
+	 * 
+	 * @see https://github.com/DesktopWebAnalytics
+	 * 
+	 */
 	public class PiwikAPI implements IEventDispatcher
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Variables
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var dispatcher:EventDispatcher;
 		
 		private var currentProfile:Profile;
@@ -54,6 +70,14 @@ package com.dwa.common.piwik
 		public var xmlCollectionBasic:XMLListCollection;
 		public var xml:XML;
 		
+		/**
+		 * Constructor.
+		 * 
+		 * 
+		 * @param profile Profile
+		 * @param date Date
+		 * 
+		 */
 		public function PiwikAPI(profile:Profile=null, date:String='')
 		{
 			dispatcher = new EventDispatcher(this);

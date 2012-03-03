@@ -18,8 +18,24 @@ package com.dwa.common.languages
 	[Event(name='complete', type='flash.events.Event')]
 	[Event(name='error', type='flash.events.ErrorEvent')]
 	
+	/**
+	 * 
+	 * @author Benoit Pouzet
+	 * 
+	 * @langversion 3.0
+	 * @productversion Flex 4
+	 * 
+	 * @see https://github.com/DesktopWebAnalytics
+	 * 
+	 */
 	public class Languages implements IEventDispatcher
 	{
+		//--------------------------------------------------------------------------
+		//
+		//  Variables
+		//
+		//--------------------------------------------------------------------------
+		
 		protected var dispatcher:EventDispatcher;
 		
 		private var locales:Array = new Array(
@@ -69,15 +85,32 @@ package com.dwa.common.languages
 			{label: "正體中文", locale: "zh_TW", short: "zh-tw", direction: "ltr"}
 		);
 		
+		/**
+		 * Constructor.
+		 * 
+		 */
 		public function Languages()
 		{
 			dispatcher = new EventDispatcher(this);
 		}
 		
+		/**
+		 * Get all available locales
+		 * 
+		 * @return Array of locales
+		 * 
+		 */
 		public function getAvailableLocales():Array{
 			return locales;
 		}
 		
+		/**
+		 * Check if the locale exists
+		 * 
+		 * @param locale
+		 * @return Boolean
+		 * 
+		 */
 		public function checkLanguage(locale:String):Boolean{
 			var find:Boolean = false;
 			for each(var loc:Object in locales){
@@ -90,6 +123,16 @@ package com.dwa.common.languages
 			return find;
 		}
 		
+		/**
+		 * Get the locale.
+		 * 
+		 * Test if the locale is available; if not, test if the localeSystem is availble; if not, get "en" locale
+		 * 
+		 * @param locale Locale wanted
+		 * @param localeSystem Locale system
+		 * @return Locale object
+		 * 
+		 */
 		public function getLocale(locale:String, localeSystem:String):Object{
 			var localeOb:Object;
 			
