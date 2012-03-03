@@ -64,6 +64,7 @@ package com.dwa.common.languages
 			{label: "ქართული", locale: "ka_GE", short: "ka", direction: "ltr"},
 			{label: "한국어", locale: "ko_KR", short: "ko", direction: "ltr"},
 			{label: "Lietuvių", locale: "lt_LT", short: "lt", direction: "ltr"},
+			{label: "Latviešu", locale: "lv_LV", short: "lv", direction: "ltr"},
 			{label: "Norsk (bokmål)", locale: "nb_NO", short: "nb", direction: "ltr"},
 			{label: "Nederlands", locale: "nl_NL", short: "nl", direction: "ltr"},
 			{label: "Nynorsk", locale: "nn_NO", short: "nn", direction: "ltr"},
