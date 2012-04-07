@@ -4,7 +4,7 @@ This library is a common library for the desktop and mobile DWA applications.
 
 You can use it, of course, in other project.
 
-This library is under LGPL v3 licence.
+This library is under LGPL v3 license.
 
 
 ## Classes
@@ -18,7 +18,7 @@ This class allows you to use the SQLite database. Works with Profile class.
 
 ### LoadIcons
 
-This class allows you to load icons to a local cache.
+This class allows you to load icons to the local storage.
 
 ### Languages
 

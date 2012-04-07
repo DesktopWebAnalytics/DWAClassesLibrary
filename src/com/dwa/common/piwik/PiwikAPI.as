@@ -3,9 +3,9 @@
 
 	Link http://www.desktop-web-analytics.com
 	Link https://github.com/DesktopWebAnalytics
-	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
+	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: PiwikAPI.as 262 2012-02-04 22:01:13Z benoit $
+	$Id: PiwikAPI.as 348 2012-04-07 12:39:04Z benoit $
 */
 package com.dwa.common.piwik
 {
@@ -57,18 +57,24 @@ package com.dwa.common.piwik
 		private var currentProfile:Profile;
 		private var currentDate:String;
 		
+		private var currentLanguage:String;
+		
 		public var filter:Boolean = false;
 		public var filterValue:Number;
+		
+		public var isCSVFormat:Boolean = false;
 		
 		private var loader:URLLoader;
 		
 		private var urlRequest:URLRequest;
 		private var requestVars:URLVariables;
 		
+		public var exportCSV:String;
+		
+		public var xml:XML;
 		public var xmlCollection:XMLListCollection;
 		public var xmlCollectionRow:XMLListCollection;
-		public var xmlCollectionBasic:XMLListCollection;
-		public var xml:XML;
+		
 		
 		/**
 		 * Constructor.
@@ -78,17 +84,17 @@ package com.dwa.common.piwik
 		 * @param date Date
 		 * 
 		 */
-		public function PiwikAPI(profile:Profile=null, date:String='')
+		public function PiwikAPI(profile:Profile=null, language:String='', date:String='')
 		{
 			dispatcher = new EventDispatcher(this);
 			trace("init piwik api");
 			
 			currentProfile = profile;
+			currentLanguage = language;
 			currentDate = date;
 			
 			xmlCollection = new XMLListCollection();
 			xmlCollectionRow = new XMLListCollection();
-			xmlCollectionBasic = new XMLListCollection();
 			xml = new XML();
 			
 			URLRequestDefaults.idleTimeout = 3600000;
@@ -116,6 +122,7 @@ package com.dwa.common.piwik
 			requestVars.date = currentDate;
 			requestVars.format = "xml";
 			if(currentProfile) requestVars.token_auth = currentProfile.websiteAuth;
+			if(currentLanguage!='') requestVars.language = currentLanguage;
 		}
 		private function callUrl(method:String, expand:Boolean = false, segment:String=null):void{
 			requestVars.method = method;
@@ -163,6 +170,8 @@ package com.dwa.common.piwik
 		}
 		public function callPiwikAPISeo(method:String, url:String):void{
 			requestVars.method = method;
+			requestVars.period = "day";
+			requestVars.date = "today";
 			requestVars.url = url;
 			
 			loadResults();
@@ -192,6 +201,13 @@ package com.dwa.common.piwik
 			loadResults();
 		}
 		private function loadResults():void{
+			if(isCSVFormat) {
+				requestVars.format = "csv";
+				// translate all data
+				requestVars.includeInnerNodes = 1;
+				requestVars.translateColumnNames = 1;
+			}
+			
 			trace("url: " + urlRequest.url);
 			trace("vars: " + requestVars.toString());
 			urlRequest.data = requestVars;
@@ -219,13 +235,13 @@ package com.dwa.common.piwik
 			loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatus);
 		}
 		private function progress(event:ProgressEvent):void{
-			
+			//trace("progress -> " + event.bytesLoaded + " / " + event.bytesTotal);
 		}
 		private function open(event:Event):void{
-			//trace(event);
+			//trace("open " + event);
 		}
 		private function httpResponse(event:HTTPStatusEvent):void{
-			//trace("HTTP response: " +event);
+			//trace("HTTP response: " + event.status);
 			if(event.status != 200) {
 				loader.close();
 				removeListeners();
@@ -233,10 +249,10 @@ package com.dwa.common.piwik
 			}
 		}
 		private function httpStatus(event:HTTPStatusEvent):void{
-			//trace("HTTP Status: " + event);
+			//trace("HTTP Status: " + event.status);
 		}
 		private function securityErrorHandler(event:SecurityErrorEvent):void {
-			trace("securityErrorHandler: " + event);
+			trace("securityErrorHandler: " + event.text);
 			removeListeners();
 			errorIn(event);
 		}
@@ -246,28 +262,34 @@ package com.dwa.common.piwik
 			removeListeners();
 			errorIn(event);
 		}
-		private function getResults(e:Event):void{
+		private function getResults(event:Event):void{
 			removeListeners();
 			
-			try{
-				xml = new XML(e.currentTarget.data);
-				// Test error xml result from server
-				var err:XMLList = new XMLList(xml.error);
+			if(isCSVFormat){
+				exportCSV = event.currentTarget.data;
 				
-				if(err.length() != 0){
-					var message:String = err.@message;
-					errorIn("[Piwik Error] " + message);
-				}else{
-					var xmlResult:XMLList = new XMLList(xml.result);
-					xmlCollectionBasic = new XMLListCollection(xml.row);
-					xmlCollection.source = xmlResult;
-					xmlCollectionRow.source = xmlResult.row;
-					finish();
+				finish();
+			}else{
+				try{
+					xml = new XML(event.currentTarget.data);
+					// Test error xml result from server
+					var err:XMLList = new XMLList(xml.error);
+					
+					if(err.length() != 0){
+						var message:String = err.@message;
+						errorIn("[Piwik Error] " + message);
+					}else{
+						var xmlResult:XMLList = new XMLList(xml.result);
+						xmlCollectionRow = new XMLListCollection(xml.row);
+						xmlCollection.source = xmlResult;
+						finish();
+					}
+				}catch(event:Error){
+					trace("error result: " + event.toString());
+					errorIn("error result");
 				}
-			}catch(event:ErrorEvent){
-				trace("error result: " + event.toString());
-				errorIn("error result");
 			}
+			
 		}
 		
 		private function finish():void{
@@ -277,9 +299,10 @@ package com.dwa.common.piwik
 		private function clearAll():void{
 			loader = null;
 			
+			exportCSV = null;
+			
 			xmlCollection = null;
 			xmlCollectionRow = null;
-			xmlCollectionBasic = null;
 			xml = null;
 			System.disposeXML(xml);
 		}

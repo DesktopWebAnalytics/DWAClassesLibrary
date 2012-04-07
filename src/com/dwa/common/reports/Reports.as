@@ -3,9 +3,9 @@
 
 	Link http://www.desktop-web-analytics.com
 	Link https://github.com/DesktopWebAnalytics
-	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
+	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: Reports.as 277 2012-03-01 21:24:33Z benoit $
+	$Id: Reports.as 348 2012-04-07 12:39:04Z benoit $
 */
 package com.dwa.common.reports
 {
@@ -47,29 +47,34 @@ package com.dwa.common.reports
 		
 		private var mobiles:Array = new Array("AND", "BLB", "IPA", "IPH", "MAE", "POS", "SYM", "WOS", "WP7");
 		
+		public var language:String;
+		public var resultCSV:String;
+		
 		public var result:XML;
 		public var resultCollection:XMLListCollection;
 		public var resultCollectionRow:XMLListCollection;
-		public var resultCollectionBasic:XMLListCollection;
 		
 		/**
 		 * Constructor.
 		 * 
 		 */
-		public function Reports()
+		public function Reports(locale:String='')
 		{
 			dispatcher = new EventDispatcher(this);
+			
+			language = locale;
 		}
 		
 		/**
-		 * Get visists
+		 * Get visits
 		 *  
 		 * @param profile
 		 * @param date
 		 * 
 		 */
-		public function getVisits(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getVisits(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("VisitsSummary.get");
@@ -82,10 +87,23 @@ package com.dwa.common.reports
 		 * 
 		 */
 		public function getVisitsChart(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+			piwikApi = new PiwikAPI(profile, language, date);
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPISimple("VisitsSummary.get");
+		}
+		/**
+		 * Get visits evolution
+		 *  
+		 * @param profile
+		 * @param date
+		 * 
+		 */
+		public function getVisitsEvolution(profile:Profile, date:String):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPISimple("VisitsSummary.getVisits");
 		}
 		/**
 		 * Get visists per local time
@@ -94,10 +112,11 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getVisitsPerLocalTime(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getVisitsPerLocalTime(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
 			piwikApi.filter = true;
 			piwikApi.filterValue = 24;
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("VisitTime.getVisitInformationPerLocalTime");
@@ -109,10 +128,11 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getVisitsPerServerTime(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getVisitsPerServerTime(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
 			piwikApi.filter = true;
 			piwikApi.filterValue = 24;
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("VisitTime.getVisitInformationPerServerTime");
@@ -124,8 +144,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getConfiguration(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getConfiguration(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getConfiguration");
@@ -137,8 +158,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getBrowserType(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getBrowserType(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getBrowserType");
@@ -150,8 +172,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getBrowser(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getBrowser(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getBrowser");
@@ -163,8 +186,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getOs(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getOs(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getOS");
@@ -176,8 +200,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getResolution(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getResolution(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getResolution");
@@ -189,8 +214,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getWideScreen(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getWideScreen(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getWideScreen");
@@ -202,8 +228,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getPlugin(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getPlugin(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getPlugin");
@@ -215,8 +242,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getCountry(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getCountry(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserCountry.getCountry");
@@ -240,8 +268,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getGeoIPCountry(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getGeoIPCountry(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("GeoIP.getGeoIPCountry");
@@ -253,8 +282,9 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getProvider(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getProvider(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Provider.getProvider");
@@ -267,7 +297,7 @@ package com.dwa.common.reports
 		 * 
 		 */
 		public function getMobileOs(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+			piwikApi = new PiwikAPI(profile, language, date);
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			var segment:String = "";
@@ -286,8 +316,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getPageUrls(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getPageUrls(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Actions.getPageUrls", desktop);
@@ -300,8 +331,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getPageTitles(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getPageTitles(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Actions.getPageTitles", desktop);
@@ -314,8 +346,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getOutlinks(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getOutlinks(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Actions.getOutlinks", desktop);
@@ -328,8 +361,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getDownloads(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getDownloads(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Actions.getDownloads", desktop);
@@ -343,12 +377,28 @@ package com.dwa.common.reports
 		 * @param date
 		 * 
 		 */
-		public function getRefererType(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getRefererType(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Referers.getRefererType");
 		}
+		
+		/**
+		 * Get referer type to draw the chart
+		 *  
+		 * @param profile
+		 * @param date
+		 * 
+		 */
+		public function getRefererTypeChart(profile:Profile, date:String):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPISimple("Referers.getRefererType");
+		}
+		
 		/**
 		 * Get search engines
 		 *  
@@ -357,8 +407,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getSearchEngines(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getSearchEngines(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Referers.getSearchEngines", desktop);
@@ -371,8 +422,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getKeywords(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getKeywords(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Referers.getKeywords", desktop);
@@ -385,8 +437,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getWebsites(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getWebsites(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Referers.getWebsites", desktop);
@@ -399,8 +452,9 @@ package com.dwa.common.reports
 		 * @param desktop
 		 * 
 		 */
-		public function getCampaigns(profile:Profile, date:String, desktop:Boolean=true):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getCampaigns(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Referers.getCampaigns", desktop);
@@ -412,8 +466,9 @@ package com.dwa.common.reports
 		 * @param url
 		 * 
 		 */
-		public function getSeoRankings(profile:Profile, url:String):void{
+		public function getSeoRankings(profile:Profile, url:String, exportCSV:Boolean=false):void{
 			piwikApi = new PiwikAPI(profile);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPISeo("SEO.getRank", url);
@@ -440,8 +495,9 @@ package com.dwa.common.reports
 		 * @param idGoal
 		 * 
 		 */
-		public function getGoal(profile:Profile, date:String, idGoal:int):void{
-			piwikApi = new PiwikAPI(profile, date);
+		public function getGoal(profile:Profile, date:String, idGoal:int, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikGoal("Goals.get", idGoal);
@@ -453,7 +509,7 @@ package com.dwa.common.reports
 		 * 
 		 */
 		public function getLive(profile:Profile):void{
-			piwikApi = new PiwikAPI(profile);
+			piwikApi = new PiwikAPI(profile, language);
 			piwikApi.filter = true;
 			piwikApi.filterValue = 30;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
@@ -502,8 +558,9 @@ package com.dwa.common.reports
 		private function resultApi(event:Event):void{
 			result = piwikApi.xml;
 			resultCollection = piwikApi.xmlCollection;
-			resultCollectionBasic = piwikApi.xmlCollectionBasic;
 			resultCollectionRow = piwikApi.xmlCollectionRow;
+			
+			resultCSV = piwikApi.exportCSV;
 			
 			finish();
 		}
@@ -521,8 +578,9 @@ package com.dwa.common.reports
 			
 			result = null;
 			resultCollection = null;
-			resultCollectionBasic = null;
 			resultCollectionRow = null;
+			
+			resultCSV = null;
 			
 			System.gc();
 		}

@@ -3,9 +3,9 @@
 
 	Link http://www.desktop-web-analytics.com
 	Link https://github.com/DesktopWebAnalytics
-	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
+	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: DataBase.as 277 2012-03-01 21:24:33Z benoit $
+	$Id: DataBase.as 348 2012-04-07 12:39:04Z benoit $
 */
 package com.dwa.common.database
 {
@@ -142,6 +142,9 @@ package com.dwa.common.database
 			
 		}
 		
+		public function getCurrentDBFile():File{
+			return File.applicationStorageDirectory.resolvePath(DATABASE);
+		}
 		/**
 		 * Add default profile in the database 
 		 * 
@@ -241,7 +244,8 @@ package com.dwa.common.database
 				if(index < length){
 					insert();
 				}else{
-					finish();
+					//finish();
+					getAllWebsites(true);
 				}
 				
 			}
@@ -286,7 +290,8 @@ package com.dwa.common.database
 				
 				function updateResult(event:SQLEvent):void {
 					trace ("Update sql succeeded");
-					finish();
+					//finish();
+					getAllWebsites(true);
 				}
 				function updateError(event:SQLErrorEvent):void {
 					trace ("Update sql error: " + event.error);
@@ -337,7 +342,8 @@ package com.dwa.common.database
 				
 				function removeResult(event:SQLEvent):void {
 					trace ("Delete sql succeeded");
-					finish();
+					//finish();
+					getAllWebsites(true);
 				}
 				function removeError(event:SQLErrorEvent):void {
 					trace ("Delete sql error: " + event.error);

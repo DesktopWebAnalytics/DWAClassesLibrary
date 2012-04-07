@@ -3,9 +3,9 @@
 
 	Link http://www.desktop-web-analytics.com
 	Link https://github.com/DesktopWebAnalytics
-	Licence http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
+	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: SettingsFile.as 262 2012-02-04 22:01:13Z benoit $
+	$Id: SettingsFile.as 348 2012-04-07 12:39:04Z benoit $
 */
 package com.dwa.common.settings
 {
