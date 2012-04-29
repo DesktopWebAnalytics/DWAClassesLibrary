@@ -69,7 +69,8 @@ package com.dwa.common.database
 			var db:File = File.applicationStorageDirectory.resolvePath(DATABASE);
 			
 			if(db.exists){
-				finish();
+				//finish();
+				getAllWebsites(true);
 			}else{
 				createDB();
 			}
@@ -176,7 +177,8 @@ package com.dwa.common.database
 				function insertResult(event:SQLEvent):void {
 					
 					trace ("INSERT succeeded");
-					finish();
+					//finish();
+					getAllWebsites(true);
 					
 				}
 				function errorResult(event:SQLErrorEvent):void {
