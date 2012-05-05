@@ -5,7 +5,7 @@
 	Link https://github.com/DesktopWebAnalytics
 	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
 	
-	$Id: DataBase.as 348 2012-04-07 12:39:04Z benoit $
+	$Id: DataBase.as 357 2012-04-30 21:53:11Z benoit $
 */
 package com.dwa.common.database
 {
