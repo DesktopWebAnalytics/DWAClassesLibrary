@@ -179,9 +179,15 @@ package com.dwa.common.piwik
 		public function callPiwikAPISegment(method:String, segment:String):void{
 			callUrl(method, false, segment);
 		}
-		public function callPiwikGoal(method:String, idGoal:int):void{
+		public function callPiwikGoalSimple(method:String, idGoal:int):void{
 			requestVars.method = method;
 			requestVars.period = "day";
+			requestVars.idGoal = idGoal;
+			
+			loadResults();
+		}
+		public function callPiwikGoal(method:String, idGoal:int):void{
+			requestVars.method = method;
 			requestVars.idGoal = idGoal;
 			
 			loadResults();

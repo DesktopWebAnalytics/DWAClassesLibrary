@@ -488,13 +488,27 @@ package com.dwa.common.reports
 			piwikApi.callPiwikAPI("Goals.getGoals");
 		}
 		/**
-		 * Get goal
+		 * Get goal for chart
 		 *  
 		 * @param profile
 		 * @param date
 		 * @param idGoal
 		 * 
 		 */
+		public function getGoalChart(profile:Profile, date:String, idGoal:int, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikGoalSimple("Goals.get", idGoal);
+		}
+		/** Get goal
+		*  
+		* @param profile
+		* @param date
+		* @param idGoal
+		* 
+		*/
 		public function getGoal(profile:Profile, date:String, idGoal:int, exportCSV:Boolean=false):void{
 			piwikApi = new PiwikAPI(profile, language, date);
 			if(exportCSV) piwikApi.isCSVFormat = true;
