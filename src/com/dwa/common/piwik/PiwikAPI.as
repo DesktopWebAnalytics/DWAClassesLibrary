@@ -4,8 +4,6 @@
 	Link http://www.desktop-web-analytics.com
 	Link https://github.com/DesktopWebAnalytics
 	License http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL v3 or later
-	
-	$Id: PiwikAPI.as 348 2012-04-07 12:39:04Z benoit $
 */
 package com.dwa.common.piwik
 {
