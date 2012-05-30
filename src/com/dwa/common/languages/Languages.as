@@ -10,8 +10,6 @@ package com.dwa.common.languages
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-	
-	import mx.resources.ResourceManager;
 
 	[Event(name='complete', type='flash.events.Event')]
 	[Event(name='error', type='flash.events.ErrorEvent')]
