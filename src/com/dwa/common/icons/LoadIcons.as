@@ -47,7 +47,7 @@ package com.dwa.common.icons
 		
 		private const DIR:String = "cache/";
 		
-		public var path:String;
+		private var _path:String;
 		
 		private var file:File;
 		
@@ -60,6 +60,16 @@ package com.dwa.common.icons
 			dispatcher = new EventDispatcher(this);
 		}
 		
+		public function get path():String
+		{
+			return _path;
+		}
+
+		public function set path(value:String):void
+		{
+			_path = value;
+		}
+
 		/**
 		 * Store icon on the local storage
 		 * 

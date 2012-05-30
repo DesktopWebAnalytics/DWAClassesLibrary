@@ -27,18 +27,18 @@ package com.dwa.common.profile
 		//
 		//--------------------------------------------------------------------------
 		
-		public var dbId:int;
-		public var websiteId:int;
-		public var websiteName:String;
-		public var websiteUrl:String;
-		public var websitePiwikAccess:String;
-		public var websiteAuth:String;
-		public var websiteIconUrl:String;
-		public var websiteDay:Boolean;
-		public var websitePeriod:Number;
-		public var websiteCreated:Number;
-		public var websiteTimezone:String;
-		public var websiteCurrency:String;
+		private var _dbId:int;
+		private var _websiteId:int;
+		private var _websiteName:String;
+		private var _websiteUrl:String;
+		private var _websitePiwikAccess:String;
+		private var _websiteAuth:String;
+		private var _websiteIconUrl:String;
+		private var _websiteDay:Boolean;
+		private var _websitePeriod:Number;
+		private var _websiteCreated:Number;
+		private var _websiteTimezone:String;
+		private var _websiteCurrency:String;
 		
 		public var selected:Boolean;
 		
@@ -48,8 +48,140 @@ package com.dwa.common.profile
 		 */
 		public function Profile()
 		{
-			trace("init profile");
+			//trace("init profile");
+		}
+		
+		public function get dbId():int
+		{
+			return _dbId;
 		}
 
+		public function set dbId(value:int):void
+		{
+			_dbId = value;
+		}
+
+		public function get websiteId():int
+		{
+			return _websiteId;
+		}
+
+		public function set websiteId(value:int):void
+		{
+			_websiteId = value;
+		}
+
+		public function get websiteName():String
+		{
+			return _websiteName;
+		}
+
+		public function set websiteName(value:String):void
+		{
+			// use escapeStringDecode for old entries in database
+			_websiteName = escapeStringDecode(value);
+		}
+
+		public function get websiteUrl():String
+		{
+			return _websiteUrl;
+		}
+
+		public function set websiteUrl(value:String):void
+		{
+			_websiteUrl = value;
+		}
+
+		public function get websitePiwikAccess():String
+		{
+			return _websitePiwikAccess;
+		}
+
+		public function set websitePiwikAccess(value:String):void
+		{
+			_websitePiwikAccess = value;
+		}
+
+		public function get websiteAuth():String
+		{
+			return _websiteAuth;
+		}
+
+		public function set websiteAuth(value:String):void
+		{
+			_websiteAuth = value;
+		}
+
+		public function get websiteIconUrl():String
+		{
+			return _websiteIconUrl;
+		}
+
+		public function set websiteIconUrl(value:String):void
+		{
+			_websiteIconUrl = value;
+		}
+
+		public function get websiteDay():Boolean
+		{
+			return _websiteDay;
+		}
+
+		public function set websiteDay(value:Boolean):void
+		{
+			_websiteDay = value;
+		}
+
+		public function get websitePeriod():Number
+		{
+			return _websitePeriod;
+		}
+
+		public function set websitePeriod(value:Number):void
+		{
+			_websitePeriod = value;
+		}
+
+		public function get websiteCreated():Number
+		{
+			return _websiteCreated;
+		}
+
+		public function set websiteCreated(value:Number):void
+		{
+			_websiteCreated = value;
+		}
+
+		public function get websiteTimezone():String
+		{
+			return _websiteTimezone;
+		}
+
+		public function set websiteTimezone(value:String):void
+		{
+			_websiteTimezone = value;
+		}
+
+		public function get websiteCurrency():String
+		{
+			return _websiteCurrency;
+		}
+
+		public function set websiteCurrency(value:String):void
+		{
+			_websiteCurrency = value;
+		}
+		
+		private function escapeStringDecode(str:String):String{
+			var pattern:RegExp = /&quote;/g;
+			return str.replace(pattern, "'");
+		}
+
+		public function toString():String
+		{
+			return "[Profile dbId="+dbId+" websiteId="+websiteId+" websiteName="+websiteName+" websiteUrl="+websiteUrl+" websitePiwikAccess="+websitePiwikAccess+" websiteAuth="+websiteAuth+" websiteIconUrl="+websiteIconUrl+" websiteDay="+websiteDay+" websitePeriod="+websitePeriod+" websiteCreated="+websiteCreated+" websiteTimezone="+websiteTimezone+" websiteCurrency="+websiteCurrency+" ]";
+		}
+		
+		
 	}
 }
