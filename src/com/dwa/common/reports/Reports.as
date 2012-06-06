@@ -178,6 +178,23 @@ package com.dwa.common.reports
 			piwikApi.callPiwikAPI("UserSettings.getBrowser");
 		}
 		/**
+		 * Get browser version
+		 * 
+		 * Available from Piwik 1.8
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param exportCSV
+		 * 
+		 */
+		public function getBrowserVersion(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("UserSettings.getBrowserVersion");
+		}
+		/**
 		 * Get os
 		 *  
 		 * @param profile
@@ -190,6 +207,40 @@ package com.dwa.common.reports
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("UserSettings.getOS");
+		}
+		/**
+		 * Get os family
+		 * 
+		 * Available from Piwik 1.8
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param exportCSV
+		 * 
+		 */
+		public function getOsFamily(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("UserSettings.getOSFamily");
+		}
+		/**
+		 * Get mobile vs desktop
+		 * 
+		 * Available from Piwik 1.8
+		 *  
+		 * @param profile
+		 * @param date
+		 * @param exportCSV
+		 * 
+		 */
+		public function getMobileVsDesktop(profile:Profile, date:String, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("UserSettings.getMobileVsDesktop");
 		}
 		/**
 		 * Get resolution
@@ -287,24 +338,6 @@ package com.dwa.common.reports
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Provider.getProvider");
 		}
-		/**
-		 * Get mobile os
-		 *  
-		 * @param profile
-		 * @param date
-		 * 
-		 */
-		public function getMobileOs(profile:Profile, date:String):void{
-			piwikApi = new PiwikAPI(profile, language, date);
-			piwikApi.addEventListener(Event.COMPLETE, resultApi);
-			piwikApi.addEventListener(ErrorEvent.ERROR, error);
-			var segment:String = "";
-			for each(var mob:String in mobiles){
-				segment += "operatingSystem=="+mob+",";
-			}
-			piwikApi.callPiwikAPISegment("UserSettings.getOS", segment);
-		}
-		
 		
 		/**
 		 * Get page urls
@@ -336,6 +369,80 @@ package com.dwa.common.reports
 			piwikApi.addEventListener(ErrorEvent.ERROR, error);
 			piwikApi.callPiwikAPI("Actions.getPageTitles", desktop);
 		}
+		
+		/**
+		 * Get entry page urls
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param desktop
+		 * @param exportCSV
+		 * 
+		 */
+		public function getEntryPageUrls(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("Actions.getEntryPageUrls", desktop);
+		}
+		
+		/**
+		 * Get exit page urls
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param desktop
+		 * @param exportCSV
+		 * 
+		 */
+		public function getExitPageUrls(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("Actions.getExitPageUrls", desktop);
+		}
+		
+		/**
+		 * Get entry page titles
+		 * 
+		 * Available from Piwik 1.8
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param desktop
+		 * @param exportCSV
+		 * 
+		 */
+		public function getEntryPageTitles(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("Actions.getEntryPageTitles", desktop);
+		}
+		
+		/**
+		 * Get exit page titles
+		 * 
+		 * Available from Piwik 1.8
+		 * 
+		 * @param profile
+		 * @param date
+		 * @param desktop
+		 * @param exportCSV
+		 * 
+		 */
+		public function getExitPageTitles(profile:Profile, date:String, desktop:Boolean=true, exportCSV:Boolean=false):void{
+			piwikApi = new PiwikAPI(profile, language, date);
+			if(exportCSV) piwikApi.isCSVFormat = true;
+			piwikApi.addEventListener(Event.COMPLETE, resultApi);
+			piwikApi.addEventListener(ErrorEvent.ERROR, error);
+			piwikApi.callPiwikAPI("Actions.getExitPageTitles", desktop);
+		}
+		
+		
 		/**
 		 * Get page outlinks
 		 *  
