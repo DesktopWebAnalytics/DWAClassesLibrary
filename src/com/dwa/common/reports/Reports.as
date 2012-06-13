@@ -628,7 +628,7 @@ package com.dwa.common.reports
 		 * 
 		 */
 		public function getLive(profile:Profile):void{
-			piwikApi = new PiwikAPI(profile, language);
+			piwikApi = new PiwikAPI(profile, language, "today");
 			piwikApi.filter = true;
 			piwikApi.filterValue = 30;
 			piwikApi.addEventListener(Event.COMPLETE, resultApi);
